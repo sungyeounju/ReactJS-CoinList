@@ -15,7 +15,10 @@ interface IHistorical{
     market_cap: number;
 }
 function Chart({coinId}:CharProps){
-    const {isLoading, data} = useQuery<IHistorical[]>(["ohlcv",coinId], () => fetchCoinHistory(coinId))
+    const {isLoading, data} = useQuery<IHistorical[]>(
+        ["ohlcv",coinId],
+        () => fetchCoinHistory(coinId)
+    );
     return (
         <div>
             {isLoading ? (
@@ -53,7 +56,18 @@ function Chart({coinId}:CharProps){
                         axisBorder: { show: false },
                         axisTicks: { show: false },
                         labels: { show: false },
+                        categories: data?.map(price => (+price.time_close * 1000))
                         },
+                        fill:{
+                            type:"gradient",
+                            gradient:{gradientToColors : ["blue"],stops:[0,100]},
+                        },
+                        colors:["red"],
+                        tooltip:{
+                            y:{
+                                formatter:(value)=>`$ ${value.toFixed(3)}`
+                            },
+                        }
                     }}
                 />
             )}

@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { Switch, Route, useLocation, useParams, Link, useRouteMatch } from "react-router-dom";
 import { styled } from "styled-components";
 import { fetchCoinInfo, fetchCoinTicker } from "../api";
+import Helmet from "react-helmet";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -58,6 +59,14 @@ const Tab = styled.span<{isActive:boolean}>`
         height:100%;
         padding:15px 0;
     }
+`
+const Prebtn = styled.button`
+    display:block;
+    position:absolute;
+    left:0;
+    top:0;
+    width:100px;
+    height:100px;
 `
 interface Params{
     coinId: string;
@@ -136,9 +145,17 @@ function Coin(){
     const loading = infoLoading || tickersLoading
     return (
         <Cointainer>
+            <Helmet>
+                <title>
+                    {state?.name ? state.name : loading ? "loading" : infoData?.name}
+                </title>
+            </Helmet>
             <Header>
                 <Title>코인 {state?.name || "loading"}</Title>
             </Header>
+            <Prebtn>
+                <Link to="/">뒤로가기</Link>
+            </Prebtn>
             {
                 loading ? (
                     "Loading..."
@@ -154,10 +171,10 @@ function Coin(){
                                 <span>{infoData?.symbol}</span>
                             </OverviewItem>
                             <OverviewItem>
-                                <span>Open Source : </span>
-                                <span>{infoData?.open_source ? "yes" : "no"}</span>
+                                <span>Price : </span>
+                                <span>00.</span>
                             </OverviewItem>
-                        </Overview>
+                        </Overview> 
                             <Description>
                                 <span>{infoData?.description}</span>
                             </Description>
