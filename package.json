@@ -26,8 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
   },
+  "homepage": "https://sungyeounju.github.io/ReactJS-CoinList/",
   "eslintConfig": {
     "extends": [
       "react-app",
