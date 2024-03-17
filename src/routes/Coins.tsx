@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { styled } from "styled-components";
 import { fetchCoins } from "../api";
 import { isDarkAtom } from "../atom";
@@ -32,6 +32,9 @@ const CoinList = styled.ul`
     padding:0;
 `
 const Header = styled.h1`
+    position:relative;
+    display:flex;
+    justify-content: center;
     margin:10px 0;
     font-size:20px;
 `
@@ -45,6 +48,18 @@ const Img = styled.img`
     height:auto;
     margin-right:8px;
 `
+const Btn = styled.button`
+    position: absolute;
+    right: 0;
+    top: 25px;
+    height:40px;
+    padding:0 20px;
+    background:none;
+    border:none;
+    border-radius:30px;
+    background-color:${props=>(props.theme.textColor)};
+    color:${props=>(props.theme.bgColor)};
+`
 
 interface Icoins{
     id: string,
@@ -57,6 +72,7 @@ interface Icoins{
 }
 
 function Coins(){
+    const [isDark, setIsDark] = useRecoilState(isDarkAtom);
     const setDarkAtom = useSetRecoilState(isDarkAtom);
     const toggleDarkAtom = () => setDarkAtom(prev => !prev);
     const {isLoading,data} = useQuery<Icoins[]>("allCoins",fetchCoins)
@@ -76,7 +92,9 @@ function Coins(){
         <Cointainer>
             <Header>
                 <Title>코인</Title>   
-                <button onClick={toggleDarkAtom}>Toggle Mode</button> 
+                <Btn onClick={toggleDarkAtom}>
+                    {isDark ? '☀️ LightMode' : '🌙 DarkMode'}
+                </Btn> 
             </Header>                    
             {isLoading ? (
                 "loading"
@@ -88,7 +106,7 @@ function Coins(){
                                 pathname: `${coin.id}`,
                                 state : {name:coin.name},
                             }}>
-                                <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
+                                <Img src={`https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/64/${coin.name.toLowerCase().replace(/\s+/g, '-')+".png"}`} />
                                 {coin.name} &rarr;
                             </Link>
                         </Coin>
